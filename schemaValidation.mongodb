@@ -1,0 +1,48 @@
+db.users.drop();
+
+db.createCollection('users', {
+    validator: {
+        $jsonSchema: {
+            required: ['firstName', 'lastName', 'email'],
+            properties: {
+                firstName: {
+                    bsonType: 'string',
+                    description: 'must be a string and is required'
+                },
+                lastName: {
+                    bsonType: 'string',
+                    description: 'must be a string and is required'
+                },
+                birthday: {
+                    bsonType: 'date'
+                },
+                email: {
+                    bsonType: 'string',
+                    description: 'must be a string and is required'
+                },
+                gender: {
+                    bsonType: 'string',
+                    description: 'must be a string'
+                },
+                address: {
+                    bsonType: 'object',
+                    required: ['city', 'street','house'],
+                    properties: {
+                        city: {
+                            bsonType: 'string',
+                            description: 'must be a string and is required'
+                        },
+                        street: {
+                            bsonType: 'string',
+                            description: 'must be a string and is required'
+                        },
+                        house: {
+                            bsonType: 'int',
+                            description: 'must be an integer and is required'
+                        }
+                    }
+                }
+            }
+        }
+    }
+});

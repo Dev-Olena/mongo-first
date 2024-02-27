@@ -1,0 +1,10 @@
+db.users.insertMany([
+    {
+        username: 'user123',
+        messages: [{
+            text: 'Hello'
+        }, {
+            text: 'How are you'
+        }]
+    }
+]);
