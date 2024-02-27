@@ -1,1 +1,141 @@
+//виведе всі колекції БД
 show collections;
+
+//додавання одного документу
+db.students.insertOne({
+    firstName: "Nick",
+    lastName: "Grey",
+    age: 23
+});
+
+db.students.insertOne({
+    lastName: "Brown",
+    address: {
+        city: "London",
+        street: "Baker",
+        house: 45
+    },
+    specialty: "data analytics"
+});
+
+
+//виведе всіх з колекції students
+db.students.find();
+
+//додавання багатьох в новостворену колекцію items
+db.items.insertMany([
+    { "item": "journal", "qty": 25, "size": { "h": 14, "w": 21, "uom": "cm" }, "status": "A" },
+    { "item": "notebook", "qty": 50, "size": { "h": 8.5, "w": 11, "uom": "in" }, "status": "A" },
+    { "item": "paper", "qty": 100, "size": { "h": 8.5, "w": 11, "uom": "in" }, "status": "D" },
+    { "item": "planner", "qty": 75, "size": { "h": 22.85, "w": 30, "uom": "cm" }, "status": "D" },
+    { "item": "postcard", "qty": 45, "size": { "h": 10, "w": 15.25, "uom": "cm" }, "status": "A" }
+]);
+
+//значення qty <=50
+db.items.find({
+   qty: { 
+    $lte: 50
+}
+});
+
+//вкладене значення h >=10 
+db.items.find({
+    "size.h": {
+        $gte: 10
+    }
+});
+
+
+//у кого ім'я John
+db.students.find({
+    firstName: 'John'
+});
+
+//ім'я починається на J та є поле 'age'
+db.students.find({
+    firstName: /^J/,
+    age: {
+        $exists: true
+    }
+});
+
+//різні об'єкти птахів
+db.birds.insertMany([
+    {name: 'bird 1', age: 2, color: 'white'},
+    {name: 'bird 2', color: 'brown', age: 3},
+    {name: 'bird 3', age: 1, color: 'black'}
+]);
+
+db.birds.find();
+
+//видалення колекції birds
+db.birds.drop();
+
+
+db.inventory.insertMany( [
+    { item: "canvas", qty: 100, size: { h: 28, w: 35.5, uom: "cm" }, status: "A" },
+    { item: "journal", qty: 25, size: { h: 14, w: 21, uom: "cm" }, status: "A" },
+    { item: "mat", qty: 85, size: { h: 27.9, w: 35.5, uom: "cm" }, status: "A" },
+    { item: "mousepad", qty: 25, size: { h: 19, w: 22.85, uom: "cm" }, status: "P" },
+    { item: "notebook", qty: 50, size: { h: 8.5, w: 11, uom: "in" }, status: "P" },
+    { item: "paper", qty: 100, size: { h: 8.5, w: 11, uom: "in" }, status: "D" },
+    { item: "planner", qty: 75, size: { h: 22.85, w: 30, uom: "cm" }, status: "D" },
+    { item: "postcard", qty: 45, size: { h: 10, w: 15.25, uom: "cm" }, status: "A" },
+    { item: "sketchbook", qty: 80, size: { h: 14, w: 21, uom: "cm" }, status: "A" },
+    { item: "sketch pad", qty: 95, size: { h: 22.85, w: 30.5, uom: "cm" }, status: "A" }
+ ] );
+
+ //оновлення документів: в колекції inventory, в яких статус А міняємо на done
+ db.inventory.updateMany({
+    status: 'A'
+ }, {
+    $set: {
+        status: 'done'
+    }
+ });
+
+ //міняємо статус Р на error
+ db.inventory.updateMany({
+    status: 'P'
+ }, {
+    $set: {
+        status: 'error'
+    }
+ });
+
+ db.inventory.updateMany({
+    status: 'D'
+ }, {
+    $set: {
+        status: 'processing'
+    }
+ });
+
+ //оновлення вкладеного поля
+ db.inventory.updateMany({
+    'size.uom': 'in'
+ }, {
+    $set: {
+    'size.uom': 'foot'
+    }
+ });
+
+
+ db.inventory.find();
+
+ //видалення документів, в яких або статус 'error' або (статус 'done' і qty>=50)
+ db.inventory.deleteMany({
+    $or: [{
+        status: 'error'
+    }, {
+        $and: [{
+            status: 'done'
+        }, {
+            qty: {
+                $gte: 50
+            }
+        }]
+    }]
+ });
+
+ 
