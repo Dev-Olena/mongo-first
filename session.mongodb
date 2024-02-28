@@ -1,6 +1,4 @@
 //виведе всі колекції БД
-show collections;
-
 //додавання одного документу
 db.students.insertOne({
     firstName: "Nick",
@@ -137,5 +135,7 @@ db.inventory.insertMany( [
         }]
     }]
  });
+
+ db;
 
  

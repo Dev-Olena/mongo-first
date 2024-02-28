@@ -1,0 +1,1 @@
+GET http://localhost:5000/api/cats/65df27bbe6cee7ab4d9ad8fd HTTP/1.1
