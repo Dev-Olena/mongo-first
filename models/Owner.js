@@ -38,7 +38,11 @@ const ownerSchema = mongoose.Schema({
             type: String,
             enum: ['house', 'appartment', 'room']
         }
-    }
+    },
+    cats: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Cat'
+    }]
 });
 
 const Owner = mongoose.model('Owner', ownerSchema);

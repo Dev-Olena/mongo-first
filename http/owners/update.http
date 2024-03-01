@@ -1,6 +1,6 @@
-PUT http://localhost:5000/api/owners/65df27bbe6cee7ab4d9ad8fd HTTP/1.1
+PUT http://localhost:5000/api/owners/65e07b9996d8ec20fdde3c3f HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "Misha"
+    "cats": ["65e1b02621840c87b0d20bf2"]
 }

@@ -12,7 +12,7 @@ module.exports.createOne = async(req, res, next) => {
 
 module.exports.getAll = async(req, res, next) => {
     try {
-        const cats = await Cat.find({});
+        const cats = await Cat.find({}).populate('owner');
         res.status(200).send({data: cats});  
     } catch (error) {
         next(error)
@@ -22,7 +22,7 @@ module.exports.getAll = async(req, res, next) => {
 module.exports.getOne = async(req, res, next) => {
     try {
         const {params: {catId}} = req;
-        const oneCat = await Cat.findById(catId);
+        const oneCat = await Cat.findById(catId).populate('owner');
         res.status(200).send({data: oneCat})
     } catch (error) {
         next(error)
@@ -32,7 +32,6 @@ module.exports.getOne = async(req, res, next) => {
 module.exports.updateOne = async(req, res, next) => {
     try {
         const {body,  params: {catId}} = req;
-        // const updated = await  Cat.findOneAndUpdate({id: catId}, body);
         const updated = await Cat.findByIdAndUpdate(catId, body);
         res.status(200).send({data: updated})
     } catch (error) {

@@ -1,4 +1,4 @@
-const {Owner} = require('../models');
+const {Owner, Cat} = require('../models');
 
 module.exports.createOne = async(req, res, next) => {
     try {
@@ -12,7 +12,7 @@ module.exports.createOne = async(req, res, next) => {
 
 module.exports.getAll = async(req, res, next) => {
     try {
-        const owners = await Owner.find({});
+        const owners = await Owner.find({}).populate('cats');
         res.status(200).send({data: owners});  
     } catch (error) {
         next(error)
@@ -22,7 +22,7 @@ module.exports.getAll = async(req, res, next) => {
 module.exports.getOne = async(req, res, next) => {
     try {
         const {params: {ownerId}} = req;
-        const oneOwner = await Owner.findById(ownerId);
+        const oneOwner = await Owner.findById(ownerId).populate('cats');
         res.status(200).send({data: oneOwner})
     } catch (error) {
         next(error)
