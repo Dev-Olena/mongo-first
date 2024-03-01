@@ -49,3 +49,19 @@ module.exports.deleteOne = async(req, res, next) => {
         next(error)
     }
 };
+
+module.exports.addCatToOwner = async(req, res, next) => {
+    try {
+        const {params: {catId, ownerId}} = req;
+        const cat = await Cat.findOneAndUpdate({_id: catId}, {owner: ownerId}, {returnDocument: 'after'});
+        const owner = await Owner.findById(ownerId);
+        owner.cats.push(catId);
+        await owner.save();
+        res.status(200).send({data: {
+            addedCat: cat,
+            owner: owner
+        }})
+    } catch (error) {
+        next(error)
+    }
+}

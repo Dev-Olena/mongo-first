@@ -9,4 +9,6 @@ ownerRouter.get('/', OwnerController.getAll);
 ownerRouter.get('/:ownerId', OwnerController.getOne);
 ownerRouter.delete('/:ownerId', OwnerController.deleteOne);
 
+ownerRouter.patch('/:ownerId/:catId', OwnerController.addCatToOwner);
+
 module.exports = ownerRouter;
