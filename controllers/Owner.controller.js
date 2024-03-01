@@ -1,10 +1,10 @@
-const {Cat} = require('../models/index.js');
+const {Owner} = require('../models');
 
 module.exports.createOne = async(req, res, next) => {
     try {
         const {body} = req;
-        const newCat = await Cat.create(body);
-        res.status(201).send({data: {newCat}}); 
+        const newOwner = await Owner.create(body);
+        res.status(201).send({data: {newOwner}}); 
     } catch (error) {
         next(error)
     }
@@ -12,8 +12,8 @@ module.exports.createOne = async(req, res, next) => {
 
 module.exports.getAll = async(req, res, next) => {
     try {
-        const cats = await Cat.find({});
-        res.status(200).send({data: cats});  
+        const owners = await Owner.find({});
+        res.status(200).send({data: owners});  
     } catch (error) {
         next(error)
     }
@@ -21,9 +21,9 @@ module.exports.getAll = async(req, res, next) => {
 
 module.exports.getOne = async(req, res, next) => {
     try {
-        const {params: {catId}} = req;
-        const oneCat = await Cat.findById(catId);
-        res.status(200).send({data: oneCat})
+        const {params: {ownerId}} = req;
+        const oneOwner = await Owner.findById(ownerId);
+        res.status(200).send({data: oneOwner})
     } catch (error) {
         next(error)
     }
@@ -31,9 +31,8 @@ module.exports.getOne = async(req, res, next) => {
 
 module.exports.updateOne = async(req, res, next) => {
     try {
-        const {body,  params: {catId}} = req;
-        // const updated = await  Cat.findOneAndUpdate({id: catId}, body);
-        const updated = await Cat.findByIdAndUpdate(catId, body);
+        const {body,  params: {ownerId}} = req;
+        const updated = await Owner.findByIdAndUpdate(ownerId, body);
         res.status(200).send({data: updated})
     } catch (error) {
         next(error)
@@ -43,8 +42,8 @@ module.exports.updateOne = async(req, res, next) => {
 
 module.exports.deleteOne = async(req, res, next) => {
     try {
-        const {params: {catId}} = req;
-        const deleted = await Cat.findByIdAndDelete(catId)
+        const {params: {ownerId}} = req;
+        const deleted = await Owner.findByIdAndDelete(ownerId)
         res.status(204).send({data: deleted})
     } catch (error) {
         next(error)
