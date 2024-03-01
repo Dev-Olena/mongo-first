@@ -1,10 +1,166 @@
-db.users.insertMany([
-    {
-        username: 'user123',
-        messages: [{
-            text: 'Hello'
-        }, {
-            text: 'How are you'
-        }]
+db.createCollection('groups', {
+    validator: {
+        $jsonSchema: {
+            required: ['groupName'],
+            properties: {
+                groupName: {
+                    bsonType: 'string',
+                    description: 'must be a string and is required'
+                },
+                couratorName: {
+                    bsonType: 'string',
+                    description: 'must be a string'
+                }
+            }
+        }
     }
-]);
+});
+
+db.groups.insertMany([{
+    groupName: 'gr-1',
+    couratorName: 'Poll Fredly'
+}, {
+    groupName: 'gr-2',
+    couratorName: 'Piter Jonson'
+}, {
+    groupName: 'gr-3',
+    couratorName: 'Vera Barton'
+}]);
+
+db.groups.find();
+
+db.createCollection('students', {
+    validator: {
+        $jsonSchema: {
+            required: ['firstName', 'lastName', 'email'],
+            properties: {
+                groupId: {
+                    bsonType: 'objectId'
+                },
+                firstName: {
+                    bsonType: 'string',
+                    description: 'must be a string and is required'
+                },
+                lastName: {
+                    bsonType: 'string',
+                    description: 'must be a string and is required'
+                },
+                email: {
+                    bsonType: 'string',
+                    description: 'must be a string and is required'
+                },
+                birthday: {
+                    bsonType: 'date'
+                }
+            }
+        }
+    }
+});
+
+db.students.drop();
+
+db.students.insertMany([{
+    firstName: "Jane",
+    lastName: "Bart",
+    email: "janba@jf.hf",
+    groupId: new ObjectId('65e18a16ddeb5cb1c15b1a3c')
+}, {
+    firstName: "Bill",
+    lastName: "Bart",
+    email: "dfnba@jf.hf",
+    groupId: new ObjectId('65e18a16ddeb5cb1c15b1a3d')
+}, {
+    firstName: "Kate",
+    lastName: "Doe",
+    email: "kanr@jf.hf",
+    groupId: new ObjectId('65e18a16ddeb5cb1c15b1a3d')
+}, {
+    firstName: "Bob",
+    lastName: "Stall",
+    email: "bs258@jf.hf",
+    groupId: new ObjectId('65e18a16ddeb5cb1c15b1a3c')
+}, {
+    firstName: "Alex",
+    lastName: "Vong",
+    email: "vo58al@jf.hf",
+    groupId: new ObjectId('65e18a16ddeb5cb1c15b1a3d')
+}, {
+    firstName: "Albert",
+    lastName: "Storm",
+    email: "2587al@jf.hf",
+    groupId: new ObjectId('65e18a16ddeb5cb1c15b1a3c')
+}, {
+    firstName: "Milla",
+    lastName: "Bredly",
+    email: "mila78al@jf.hf",
+    groupId: new ObjectId('65e18a16ddeb5cb1c15b1a3e')
+}, {
+    firstName: "Sem",
+    lastName: "Kerby",
+    email: "rety@jf.hf",
+    groupId: new ObjectId('65e18a16ddeb5cb1c15b1a3c')
+}, {
+    firstName: "Nick",
+    lastName: "Rilson",
+    email: "rill@jf.hf",
+    groupId: new ObjectId('65e18a16ddeb5cb1c15b1a3e')
+}, {
+    firstName: "Mery",
+    lastName: "Moris",
+    email: "vmorl@jf.hf",
+    groupId: new ObjectId('65e18a16ddeb5cb1c15b1a3d')
+}, {
+    firstName: "Kevin",
+    lastName: "Doe",
+    email: "doe@jf.hf",
+    groupId: new ObjectId('65e18a16ddeb5cb1c15b1a3d')
+}]);
+
+db.students.find();
+
+//студенти з інформацією про групи
+db.students.aggregate([{
+    $lookup: {
+      from: 'groups',
+      localField: 'groupId',
+      foreignField: '_id',
+      as: 'group'
+    }
+}, {
+    $unwind: '$group'
+}, {
+    $unset: 'groupId'
+}]);
+
+//кількість студентів в кожній групі
+db.students.aggregate([{
+    $lookup: {
+      from: 'groups',
+      localField: 'groupId',
+      foreignField: '_id',
+      as: 'group'
+    }
+}, {
+    $unwind: '$group'
+}, {
+    $unset: 'groupId'
+}, {
+    $group: {
+        _id: '$group.groupName',
+        countStud: {
+            $count: {}
+        }
+    }
+}]);
+
+//групи з інформацією про студентів
+db.groups.aggregate([{
+    $lookup: {
+      from: 'students',
+      localField: '_id',
+      foreignField: 'groupId',
+      as: 'students'
+    }
+}, {
+    $unset: 'students.groupId'
+}]);
